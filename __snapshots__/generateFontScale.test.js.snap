@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generateFontScale Snapshot tests golden ratio scale (1.618) with 18px base 1`] = `
+{
+  "fontSizes": {
+    "base": [
+      "1rem",
+      {
+        "lineHeight": 1.4,
+      },
+    ],
+    "lg": [
+      "1.618rem",
+      {
+        "lineHeight": 1.2,
+      },
+    ],
+    "sm": [
+      "0.618rem",
+      {
+        "lineHeight": 1.6,
+      },
+    ],
+    "xl": [
+      "2.618rem",
+      {
+        "lineHeight": 1.2,
+      },
+    ],
+    "xs": [
+      "0.382rem",
+      {
+        "lineHeight": 1.6,
+      },
+    ],
+  },
+}
+`;
+
+exports[`generateFontScale Snapshot tests minor third scale (1.2) with 16px base 1`] = `
+{
+  "fontSizes": {
+    "base": [
+      "1rem",
+      {
+        "lineHeight": 1.5,
+      },
+    ],
+    "lg": [
+      "1.2rem",
+      {
+        "lineHeight": 1.4,
+      },
+    ],
+    "sm": [
+      "0.833rem",
+      {
+        "lineHeight": 1.5,
+      },
+    ],
+    "xl": [
+      "1.44rem",
+      {
+        "lineHeight": 1.2,
+      },
+    ],
+    "xs": [
+      "0.694rem",
+      {
+        "lineHeight": 1.6,
+      },
+    ],
+  },
+}
+`;
+
+exports[`generateFontScale Snapshot tests perfect fifth scale (1.5) with 16px base 1`] = `
+{
+  "fontSizes": {
+    "base": [
+      "1rem",
+      {
+        "lineHeight": 1.5,
+      },
+    ],
+    "lg": [
+      "1.5rem",
+      {
+        "lineHeight": 1.2,
+      },
+    ],
+    "sm": [
+      "0.667rem",
+      {
+        "lineHeight": 1.6,
+      },
+    ],
+    "xl": [
+      "2.25rem",
+      {
+        "lineHeight": 1.2,
+      },
+    ],
+    "xs": [
+      "0.444rem",
+      {
+        "lineHeight": 1.6,
+      },
+    ],
+  },
+}
+`;
