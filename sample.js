@@ -3,9 +3,7 @@ import inquirer from "inquirer";
 import fs from "fs";
 import path from "path";
 import generateFontScale from "./generateFontScale.js";
-
-// Helper to snap values to 4px baseline
-const snap4px = (px) => Math.round(px / 4) * 4;
+import generateSpacingScale from "./generateSpacingScale.js";
 
 inquirer
   .prompt([
@@ -13,16 +11,26 @@ inquirer
       type: "list",
       name: "gridSystem",
       message: "Choose what Grid System to use",
-      choices: ["8 and 4 Point Grid", "2x Grid"],
+      choices: [
+        { name: "8 and 4 Point Grid", value: 4 },
+        { name: "2x Grid", value: 2 },
+      ],
     },
     {
-      type: "list",
+      type: "input",
       name: "baseFontSize",
-      message: "Enter Base Font Size:",
-      choices: [
-        { name: "16px", value: 16 },
-        { name: "18px", value: 18 },
-      ],
+      message: "Enter Base Font Size (px):",
+      default: "16px",
+      validate: function (input) {
+        const num = parseInt(input);
+        if (isNaN(num)) {
+          return "Please enter a valid number";
+        }
+        return true;
+      },
+      filter: function (input) {
+        return parseInt(input);
+      },
     },
     {
       type: "list",
@@ -42,34 +50,26 @@ inquirer
         { name: "Octave (2.0)", value: 2.0 },
       ],
     },
-    {
-      type: "list",
-      name: "color",
-      message: "Set default Color:",
-      choices: ["Slate", "Rose", "Indigo", "Sky", "Emerald", "Amber"],
-    },
   ])
   .then(
-    ({ gridSystem: grid, baseFontSize: base, contrastRatio: ratio, color }) => {
-      color = color.toLowerCase();
-      console.log(grid);
-      console.log(base);
-      console.log(ratio);
-      console.log(color);
+    ({ gridSystem: grid, baseFontSize: base, contrastRatio: ratio }) => {
+      const fontSizes = generateFontScale(base, ratio);
+      const { spacing, cssVars } = generateSpacingScale(grid);
 
-      const { fontSizes } = generateFontScale(base, ratio);
-
-      console.log(fontSizes);
+      console.log(fontSizes)
+      console.log(cssVars)
 
       // Generate Tailwind preset
       const presetFile = path.join(process.cwd(), "pixel-grid-preset.js");
-      const presetContent = `
+      const presetContent = `const plugin = require("tailwindcss/plugin")
+
 export default {
   theme: {
-    fontSize: ${JSON.stringify(fontSizes)}
+    fontSize: ${JSON.stringify(fontSizes)},
+    extend: {
+      spacing:  ${JSON.stringify(spacing)},
+    }
   },
-  corePlugins: {},
-  plugins: []
 };`;
 
       fs.writeFileSync(presetFile, presetContent);
@@ -79,4 +79,10 @@ export default {
       );
     },
   )
-  .catch((error) => console.error(error));
+  .catch(error => {
+    if (error.name === "ExitPromptError") {
+      console.log("\nInstallation terminated...");
+      process.exit(0);
+    }
+    throw error;
+  });
